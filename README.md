@@ -1,7 +1,7 @@
 # Simple Tasklist
 [Web app](https://luscasmm.github.io/Simple_Tasklist)
 
-This is a simple **tasklist app** that was implemented using web development tools like: **HTML**, **CSS**, **[Materialize css](https://materializecss.com/)**
+This is a simple **tasklist app** that was implemented using web development tools like: **HTML**, **CSS**, **[Materialize](https://materializecss.com/)**
 and **JavaScript**.
 
 ## Running
