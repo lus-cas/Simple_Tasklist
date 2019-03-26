@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<title>To Do List</title>
+
+
+	<meta charset="utf-8">
+	<meta lang="pt-br">
+
+	<meta author="Lucas Miguel">
+
+
+
+	<link rel="stylesheet" type="text/css" href="css/materialize.min.css">
+	<link rel="stylesheet" type="text/css" href="css/css.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+
+</head>
+
+
+<body>
+
+	<header class="row">
+		<div class="col s12 m10 l6 offset-m1 offset-l3">
+			<h1 class="col s12 center">Tasks List</h1>
+
+			<div id="add_button" class="col s12 h120 border focus white">
+				<form action="" method="post" accept-charset="utf-8" id="task_form">
+						<input type="text" class="browser-default col s11"required  name="title" placeholder="Título">
+						<input type="text" class="browser-default col s6" required name="accountable" placeholder="Responsável">
+						<input type="date" class="browser-default col s4 offset-s1" name="term">
+						<button type="submit" class="col s1 pointer browser-default center"><i class="material-icons submit-button">add</i></button>
+				</form>
+
+				<form class="hidden" action="" method="post" accept-charset="utf-8" id="edit_task_form">
+						<input type="text" class="browser-default col s11"required  name="title" placeholder="Título">
+						<input type="text" class="browser-default col s6" required name="accountable" placeholder="Responsável">
+						<input type="date" class="browser-default col s4 offset-s1" name="term">
+						<button type="submit" class="col s1 pointer browser-default center"><i class="material-icons submit-button">check</i></button>
+				</form>
+			</div>
+
+		</div>
+	</header>
+
+	
+	<div class="row" id="todo-wrapper">
+		<!-- No tasks layout -->
+		<!-- <div class="col s12 m10 l6 offset-m1 offset-l3 center">
+			<span> Nenhuma tarefa cadastrada </span>
+		</div> -->
+		<!-- Task layout -->
+		<!-- <div class="col s12 m10 l6 offset-m1 offset-l3">
+			<div class="row col s12 border h60">
+
+				<div class="col s10">
+					<span class="title">This is a title</span>
+					<span class="date grey-text"><i class="material-icons">event</i>01/02/2019</span>
+					<br>
+					<span>Responsável: Nome</span>
+				</div>
+
+				<div class="col s1 center">
+					<i class="material-icons option-button pointer" onclick="list.removeTask(0)">delete</i>
+				</div>
+
+				<div class="col s1 center">
+					<i class="material-icons option-button pointer" onclick="list.removeTask(0)">edit</i>
+				</div>
+
+			</div>
+		</div> -->
+	</div>
+
+	<div class="row" id="done-wrapper">
+	</div>
+
+	<div class="overlayer" id="overlayer"></div>
+
+
+</body>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+	<script type="text/javascript" src="js/materialize.min.js"></script>
+
+	<script type="text/javascript" src="js/js.js"></script>
+
+</html>

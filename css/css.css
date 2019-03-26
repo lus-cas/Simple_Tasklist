@@ -1,0 +1,123 @@
+/* color variables */
+:root {
+	--blue: #0F2B3E;
+	--orange: #F3A343;
+	--red: #DC6E53;
+	--gray: #828D95;
+	--green: #67C295;
+	--black: #575757;
+	--white: #FFF;
+	--yellow: #FFDC51;
+	--purple: #AC79B2;
+}
+
+/* sets the page font */
+*{
+	font-family: 'Montserrat', sans-serif;
+}
+
+/* genaral settings */
+h1{
+	font-weight: bold;
+	font-size: 3rem;
+}
+
+input{
+	height: 30px;
+}
+
+input:invalid{
+	box-shadow: none;
+}
+
+.pointer{
+	cursor: pointer;
+}
+
+.h60{
+	min-height: 70px;
+	padding: 10px !important;
+}
+
+.h120{
+	height: 120px;
+}
+
+.w100{
+	width: 100%;
+}
+
+.mt-10{
+	margin-top: 10vh;
+}
+
+.border{
+	border: 1px solid black;
+}
+
+.submit-button{
+	font-size: 40px !important;
+	margin-top: -10px;
+}
+
+.option-button{
+	margin-top: 10px;
+}
+
+.date{
+	font-size:  12px !important;
+	text-indent: 10px;
+	margin-left: 10px;
+}
+
+
+input{
+	text-indent: 4px;
+	margin-top: 20px;
+	color: black;
+}
+
+input[type=date]::-webkit-datetime-edit {
+    color: #999;
+}
+
+input:focus{
+	outline: var(--gray);
+}
+
+button{
+	background-color: transparent !important;
+	border: none;
+}
+
+
+.title{
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.overlayer{
+	z-index: -5;
+	opacity: 0;
+	position: fixed;
+	height: 100vh;
+	width: 100%;
+	background-color: var(--black);
+	top: 0;
+	left: 0;
+
+	transition: all 0.6s linear;
+}
+
+.focus{
+	z-index: 11 !important;
+	position: relative;
+}
+
+.hidden{
+	display: none;
+}
+
+#todo-wrapper{
+	margin-bottom: 0 !important;
+}
