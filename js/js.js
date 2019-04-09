@@ -8,7 +8,7 @@ class Task {
 	*	_status is true if the task is done and false otherwise.
 	*/
 
-	constructor(title, accountable, term, status) {
+	constructor(id, title, accountable, term, status) {
 
 		this._title = title;
 
@@ -20,6 +20,9 @@ class Task {
 
 	}
 
+	get id() {
+		return this._id;
+	}
 
 	get title() {
 		return this._title;
@@ -35,6 +38,10 @@ class Task {
 
 	get status() {
 		return this._status;
+	}
+
+	set id(id) {
+		this._id = id;
 	}
 
 	set title(title) {
@@ -55,7 +62,7 @@ class Task {
 
 	// return true iff the task is done
 	done() {
-		return status == 1;
+		return this._status == 1;
 	}
 
 }
@@ -86,10 +93,12 @@ class TaskList {
 		return (this.tasks.length == 0);
 	}
 
+	// returns all to do tasks as a list
 	toDo() {
 		return this.tasks.filter(task => { return !task.done() });
 	}
 
+	// returns all done tasks as a list
 	done() {
 		return this.tasks.filter(task => { return task.done() });
 	}
@@ -119,11 +128,13 @@ class TaskList {
 		this.printTasks();
 	}
 
+	// changes the task status (1: done 0: to do)
 	switchTaskStatus(id, status) {
 		this.tasks[id].status = status;
 		this.printTasks();
 	}
 
+	// writes the tasklist
 	printTasks() {
 		todo.innerHTML = "";
 		done.innerHTML = "";
@@ -147,13 +158,14 @@ class TaskList {
 			done.innerHTML += "<h1 class='col s12 center'>Done</h1>";
 
 			for(let i = doneTasks.length - 1; i >= 0; i--) {
-				done.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.switchTaskStatus('+i+', 0)">check_box_outline</i></div><div class="col s9"><span class="title">'+this.tasks[i].title+'</span><span class="date grey-text">'+this.tasks[i].term+'</span><br><span>Accountable: '+this.tasks[i].accountable+'</span></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="taskList.removeTask('+i+')">delete</i></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="editForm('+i+')">edit</i></div></div></div>';
+				done.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.switchTaskStatus('+i+', 0)">check_box</i></div><div class="col s9"><span class="title">'+this.tasks[i].title+'</span><span class="date grey-text">'+this.tasks[i].term+'</span><br><span>Accountable: '+this.tasks[i].accountable+'</span></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.removeTask('+i+')">delete</i></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="editForm('+i+')">edit</i></div></div></div>';
 			}
 
 		}
 		
 	}
 }
+
 
 const tasklist = new TaskList();
 
@@ -184,7 +196,7 @@ window.addEventListener("DOMContentLoaded", () => {
 	});
 
 	overlayer.addEventListener("click", event => {
-		edit_form.classList.add("hidden");
+		editTaskForm.classList.add("hidden");
 		form.classList.remove("hidden");
 		overlayer.style = "opacity: 0; z-index: -3;";
 	});
