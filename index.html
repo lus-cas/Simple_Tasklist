@@ -28,17 +28,17 @@
 			<h1 class="col s12 center">Tasklist</h1>
 
 			<div id="add_button" class="col s12 h120 border focus white">
-				<form action="" method="post" accept-charset="utf-8" id="task_form">
-						<input type="text" class="browser-default col s11"required  name="title" placeholder="Título">
-						<input type="text" class="browser-default col s6" required name="accountable" placeholder="Responsável">
-						<input type="date" class="browser-default col s4 offset-s1" name="term">
+				<form accept-charset="utf-8" name="task_form">
+						<input type="text" class="browser-default col s11"required  name="title" placeholder="Title">
+						<input type="text" class="browser-default col s6" required name="accountable" placeholder="Accountable">
+						<input type="text" class="browser-default col s4 offset-s1" name="term" placeholder="Term" maxlength="10">
 						<button type="submit" class="col s1 pointer browser-default center"><i class="material-icons submit-button">add</i></button>
 				</form>
 
-				<form class="hidden" action="" method="post" accept-charset="utf-8" id="edit_task_form">
-						<input type="text" class="browser-default col s11"required  name="title" placeholder="Título">
-						<input type="text" class="browser-default col s6" required name="accountable" placeholder="Responsável">
-						<input type="date" class="browser-default col s4 offset-s1" name="term">
+				<form class="hidden" accept-charset="utf-8" name="edit_task_form">
+						<input type="text" class="browser-default col s11"required  name="title" placeholder="Title">
+						<input type="text" class="browser-default col s6" required name="accountable" placeholder="Accountable">
+						<input type="text" class="browser-default col s4 offset-s1" name="term" placeholder="Term" maxlength="10">
 						<button type="submit" class="col s1 pointer browser-default center"><i class="material-icons submit-button">check</i></button>
 				</form>
 			</div>
@@ -48,10 +48,6 @@
 
 	
 	<div class="row" id="todo-wrapper">
-		<!-- No tasks layout -->
-		<!-- <div class="col s12 m10 l6 offset-m1 offset-l3 center">
-			<span> Nenhuma tarefa cadastrada </span>
-		</div> -->
 		<!-- Task layout -->
 		<!-- <div class="col s12 m10 l6 offset-m1 offset-l3">
 			<div class="row col s12 border h60">

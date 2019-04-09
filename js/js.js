@@ -1,6 +1,14 @@
 class Task {
 
-	constructor(title, accountable, term) {
+	/* This class represents a task.
+	*
+	*	_tittle is the task itself.
+	*	_accountable is the person who has to do the task.
+	*	_term defines the task deadline.			
+	*	_status is true if the task is done and false otherwise.
+	*/
+
+	constructor(title, accountable, term, status) {
 
 		this._title = title;
 
@@ -8,26 +16,32 @@ class Task {
 
 		this._term = term;
 
+		this._status = status;
+
 	}
 
 
-	get title () {
+	get title() {
 		return this._title;
 	}
 
-	get term () {
+	get term() {
 		return this._term;
 	}
 
-	get accountable () {
+	get accountable() {
 		return this._accountable;
+	}
+
+	get status() {
+		return this._status;
 	}
 
 	set title(title) {
 		this._title = title;
 	}
 
-	set term(term){
+	set term(term) {
 		this._term = term;
 	}
 	
@@ -35,15 +49,27 @@ class Task {
 		this._accountable = accountable;
 	}
 
+	set status(status) {
+		this._status = status;
+	}
+
+	// return true iff the task is done
+	done() {
+		return status == 1;
+	}
+
 }
 
-class List {
+class TaskList {
 
-	constructor(done) {
+	/* Tasklist class.
+	*
+	*	This class implements a tasklist object and its operations.
+	*/
+
+	constructor() {
+
 		this._tasks = [];
-		if(done == false) this._done = false;
-		else this._done = true;
-		this._cache = new Task("", "", "");
 	
 	}
 
@@ -51,103 +77,109 @@ class List {
 		return this._tasks;
 	}
 
-	get cache() {
-		return this._cache;
-	}
-
-	get done() {
-		return this._done;
-	}
-
-	set done(done) {
-		this._done = done;
-	}
-
 	set tasks(tasks){
 		this._tasks = tasks;
 	}
-	
-	set cache(cache) {
-		this._cache = cache;
-	}
 
+	// returns true if the list is empty or false elseways
 	empty() {
 		return (this.tasks.length == 0);
 	}
 
-	addTask(title, accountable, term) {
-		var task = new Task(title, accountable, term);
-		this.tasks.push(task);
+	toDo() {
+		return this.tasks.filter(task => { return !task.done() });
 	}
 
+	done() {
+		return this.tasks.filter(task => { return task.done() });
+	}
+
+	// pushes a Task to the list
 	pushTask(task) {
 		this.tasks.push(task);
 	}
 
-	removeTask(id, print) {
-		this.cache = this.tasks[id];
-		this.tasks.splice(id, 1);
-		if(print) this.printTasks();
+	// create a new Task and pushes it to the list
+	addTask(title, accountable, term, status) {
+		const task = new Task(title, accountable, term, status);
+		this.pushTask(task);
 	}
 
+	// removes a Task of the list
+	removeTask(id) {
+		this.tasks.splice(id, 1);
+		this.printTasks();
+	}
+
+	// edit task operation
 	editTask(id, title, accountable, term) {
 		this.tasks[id].title = title;
 		this.tasks[id].accountable = accountable;
 		this.tasks[id].term = term;
-		this.cache = this.tasks[id];
+		this.printTasks();
+	}
+
+	switchTaskStatus(id, status) {
+		this.tasks[id].status = status;
 		this.printTasks();
 	}
 
 	printTasks() {
+		todo.innerHTML = "";
+		done.innerHTML = "";
 
-		if(this.done == false) var wrapper = document.getElementById("todo-wrapper");
-		else var wrapper = document.getElementById("done-wrapper");
 
-		wrapper.innerHTML = "";
+		var toDoTasks = this.toDo();
+		var doneTasks = this.done();
 
-		if(this.done == false && this.tasks.length > 0) wrapper.innerHTML = "<h1 class='col s12 center'>To Do</h1>";
-		else if(this.done == true && this.tasks.length > 0) wrapper.innerHTML = "<h1 class='col s12 center'>Done</h1>";
-		for (var i = this.tasks.length - 1; i >= 0; i--) {
-			if(! this.done) wrapper.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s9"><span class="title">'+this.tasks[i].title+'</span><span class="date grey-text">'+this.tasks[i].term+'</span><br><span>Responsável: '+this.tasks[i].accountable+'</span></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="todo.removeTask('+i+', true)">delete</i></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="editForm('+i+', false)">edit</i></div><div class="col s1 center"><i class="material-icons option-button pointer green-text" onclick="doneTask('+i+')">check</i></div></div></div>';
-			else wrapper.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s9"><span class="title">'+this.tasks[i].title+'</span><span class="date grey-text">'+this.tasks[i].term+'</span><br><span>Responsável: '+this.tasks[i].accountable+'</span></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="done.removeTask('+i+', true)">delete</i></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="editForm('+i+', true)">edit</i></div><div class="col s1 center"><i class="material-icons option-button pointer red-text" onclick="toDoTask('+i+')">refresh</i></div></div></div>';
+		if(toDoTasks.length > 0) {
+
+			todo.innerHTML += "<h1 class='col s12 center'>To Do</h1>";
+
+			for(let i = toDoTasks.length - 1; i >= 0; i--) {
+				todo.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.switchTaskStatus('+i+', 1)">check_box_outline_blank</i></div><div class="col s9"><span class="title">'+this.tasks[i].title+'</span><span class="date grey-text">'+this.tasks[i].term+'</span><br><span>Accountable: '+this.tasks[i].accountable+'</span></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.removeTask('+i+')">delete</i></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="editForm('+i+')">edit</i></div></div></div>';
+			}
+
+		}
+
+		if(doneTasks.length > 0) {
+
+			done.innerHTML += "<h1 class='col s12 center'>Done</h1>";
+
+			for(let i = doneTasks.length - 1; i >= 0; i--) {
+				done.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.switchTaskStatus('+i+', 0)">check_box_outline</i></div><div class="col s9"><span class="title">'+this.tasks[i].title+'</span><span class="date grey-text">'+this.tasks[i].term+'</span><br><span>Accountable: '+this.tasks[i].accountable+'</span></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="taskList.removeTask('+i+')">delete</i></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="editForm('+i+')">edit</i></div></div></div>';
+			}
+
 		}
 		
 	}
 }
 
-var todo = new List(false);
-var done = new List(true);
+const tasklist = new TaskList();
 
-var form = document.getElementById("task_form");
-var edit_form = document.getElementById("edit_task_form");
-var input = document.getElementsByTagName("input");
-var overlayer = document.getElementById("overlayer");
-var date = "";
+const todo = document.getElementById("todo-wrapper");
+const done = document.getElementById("done-wrapper");
 
-window.addEventListener("DOMContentLoaded", event => {
+const form = document.forms["task_form"];
+const inputs = document.forms["task_form"].getElementsByTagName("input");
 
-	todo.printTasks();
+const editTaskForm = document.forms["edit_task_form"];
+const editInputs = document.forms["edit_task_form"].getElementsByTagName("input");
+
+const overlayer = document.getElementById("overlayer");
+
+window.addEventListener("DOMContentLoaded", () => {
 
 	form.addEventListener("submit", event => {
 
-
-		if(input[2].value != "") {
-			
-			date = input[2].value.split("-");
-			date = date[2]+"/"+date[1]+"/"+date[0];
-
-		}
-
-		todo.addTask(input[0].value, input[1].value, date);
-
-		todo.printTasks();
-
-		for (var i = input.length - 1; i >= 0; i--) {
-			input[i].value = "";
-			date = "";
-		}
-
 		event.preventDefault();
+
+		tasklist.addTask(inputs[0].value, inputs[1].value, inputs[2].value, 0);
+		tasklist.printTasks();
+
+		for (let i = inputs.length - 1; i >= 0; i--) {
+			inputs[i].value = "";
+		}
 
 	});
 
@@ -160,75 +192,55 @@ window.addEventListener("DOMContentLoaded", event => {
 });
 
 
-function editForm(id, list){
+var previousDateLength = 0;
+const terms = document.getElementsByName("term");
+
+for(let i = 0; i < terms.length; i++) {
+	terms[i].addEventListener("keydown", () => {
+		if(terms[i].value.length > previousDateLength) {
+			if(terms[i].value.length == 2) 
+				terms[i].value += "/";
+
+			else if(terms[i].value.length == 5)
+				terms[i].value += "/";
+		}
+
+		previousDateLength = terms[i].value.length;
+
+	});
+}
+
+
+function editForm(id) {
+
 	form.classList.add("hidden");
 	overlayer.style = "opacity: 0.8; z-index: 10;";
-	edit_form.classList.remove("hidden");
+	editTaskForm.classList.remove("hidden");
 
 	document.body.scrollTop = 0;
   	document.documentElement.scrollTop = 0; 
 
-	if(list){
-		input[3].value = done.tasks[id].title;
-		input[4].value = done.tasks[id].accountable;
+	editInputs[0].value = tasklist.tasks[id].title;
+	editInputs[1].value = tasklist.tasks[id].accountable;
+	editInputs[2].value = tasklist.tasks[id].term;
 
-		new_date = done.tasks[id].term.split("/");
-		new_date = new_date[2]+"-"+new_date[1]+"-"+new_date[0];
-
-		input[5].value = new_date;
-	}else{
-		input[3].value = todo.tasks[id].title;
-		input[4].value = todo.tasks[id].accountable;
-
-		new_date = todo.tasks[id].term.split("/");
-		new_date = new_date[2]+"-"+new_date[1]+"-"+new_date[0];
-
-		input[5].value = new_date;
-	}
-
-	var _submit = function(event) {
+	var submit = function(event) {
 
 		event.preventDefault();
 
-		if(input[5].value != "") {
-			
-			date = input[5].value.split("-");
-			date = date[2]+"/"+date[1]+"/"+date[0];
+		tasklist.editTask(id, editInputs[0].value, editInputs[1].value, editInputs[2].value);
 
+		for (var i = editInputs.length - 1; i >= 3; i--) {
+			editInputs[i].value = "";
 		}
 
-		if(list){
-			done.editTask(id, input[3].value, input[4].value, date);
-			done.printTasks();
-		}else{
-			todo.editTask(id, input[3].value, input[4].value, date);
-			todo.printTasks();
-		}
-
-		for (var i = input.length - 1; i >= 3; i--) {
-			input[i].value = "";
-			date = "";
-		}
-
-		edit_form.classList.add("hidden");
+		editTaskForm.classList.add("hidden");
 		form.classList.remove("hidden");
 		overlayer.style = "opacity: 0; z-index: -3;";
 
-		edit_form.removeEventListener("submit", _submit);
+		editTaskForm.removeEventListener("submit", submit);
 	}
 	
-	edit_form.addEventListener("submit", _submit);	
+	editTaskForm.addEventListener("submit", submit);	
 
-}
-
-function doneTask(id){
-	done.pushTask(todo.tasks[id]);
-	todo.removeTask(id, true);
-	done.printTasks();
-}
-
-function toDoTask(id){
-	todo.pushTask(done.tasks[id]);
-	done.removeTask(id, true);
-	todo.printTasks();
 }
