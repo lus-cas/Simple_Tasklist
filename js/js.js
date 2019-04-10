@@ -73,7 +73,7 @@ class Task {
 
 }
 
-class TaskList {
+class Tasklist {
 
 	/* Tasklist class.
 	*
@@ -124,6 +124,7 @@ class TaskList {
 	removeTask(id) {
 		this.tasks.splice(id, 1);
 		this.printTasks();
+		this.saveTasks();
 	}
 
 	// edit task operation
@@ -132,12 +133,14 @@ class TaskList {
 		this.tasks[id].accountable = accountable;
 		this.tasks[id].term = term;
 		this.printTasks();
+		this.saveTasks();
 	}
 
 	// changes the task status (1: done 0: to do)
 	switchTaskStatus(id, status) {
 		this.tasks[id].status = status;
 		this.printTasks();
+		this.saveTasks();
 	}
 
 	// writes the tasklist
@@ -168,37 +171,65 @@ class TaskList {
 			for(let i = doneTasks.length - 1; i >= 0; i--) {
 				let id = doneTasks[i].id;
 				id = this.tasks.findIndex(task => task.id === id);
-				
+
 				done.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.switchTaskStatus('+id+', 0)">check_box</i></div><div class="col s9"><span class="title">'+doneTasks[i].title+'</span><span class="date grey-text">'+doneTasks[i].term+'</span><br><span>Accountable: '+doneTasks[i].accountable+'</span></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.removeTask('+id+')">delete</i></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="editForm('+id+')">edit</i></div></div></div>';
 			}
 
 		}
 		
 	}
+
+	// saves the tasklist into the localStorage
+	saveTasks() {
+		let tasks = JSON.stringify(this.tasks);
+		localStorage.setItem("tasks", tasks);
+	}
 }
 
+/*	I should've created a new class for storage.
+*	Or at least organized the code in better ways.
+* 	Sorry.
+*/
 
-const tasklist = new TaskList();
+const tasklist = new Tasklist(); // Tasklist object
+tasks = localStorage.getItem("tasks");
 
-const todo = document.getElementById("todo-wrapper");
-const done = document.getElementById("done-wrapper");
+const todo = document.getElementById("todo-wrapper"); // div that contains the to do list
+const done = document.getElementById("done-wrapper"); // div that contains the done list
 
-const form = document.forms["task_form"];
-const inputs = document.forms["task_form"].getElementsByTagName("input");
+const form = document.forms["task_form"]; //new task form reference
+const inputs = document.forms["task_form"].getElementsByTagName("input"); // new task inputs
 
-const editTaskForm = document.forms["edit_task_form"];
-const editInputs = document.forms["edit_task_form"].getElementsByTagName("input");
+const editTaskForm = document.forms["edit_task_form"]; //edit task form reference
+const editInputs = document.forms["edit_task_form"].getElementsByTagName("input"); // edit inputs
 
-const overlayer = document.getElementById("overlayer");
+const overlayer = document.getElementById("overlayer"); // modal efect div
 
+
+// verifies if there's any tasks into the localStorage and pushes 'em to the tasklist object. prints the list also
+if(tasks != null) {
+
+	tasks = JSON.parse(tasks);
+
+	for(i in tasks) {
+		var task = new Task(tasks[i]._title, tasks[i]._accountable, tasks[i]._term, tasks[i]._status);
+		tasklist.pushTask(task);
+	}
+
+	tasklist.printTasks();
+}
+
+// on-load window event
 window.addEventListener("DOMContentLoaded", () => {
 
+	// prevents form from submiting and creates a new task
 	form.addEventListener("submit", event => {
 
 		event.preventDefault();
 
 		tasklist.addTask(inputs[0].value, inputs[1].value, inputs[2].value, 0);
 		tasklist.printTasks();
+		tasklist.saveTasks();
 
 		for (let i = inputs.length - 1; i >= 0; i--) {
 			inputs[i].value = "";
@@ -206,6 +237,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 	});
 
+	// the modal must to turn off on-click event
 	overlayer.addEventListener("click", event => {
 		editTaskForm.classList.add("hidden");
 		form.classList.remove("hidden");
@@ -214,6 +246,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
 });
 
+/*	messy code alert!
+*	the following statemants formats the data input into DD/MM/YYYY
+*/
 
 var previousDateLength = 0;
 const terms = document.getElementsByName("term");
@@ -233,7 +268,7 @@ for(let i = 0; i < terms.length; i++) {
 	});
 }
 
-
+// turns on the modal and edit task form
 function editForm(id) {
 
 	form.classList.add("hidden");
