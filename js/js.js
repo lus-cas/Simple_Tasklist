@@ -2,13 +2,16 @@ class Task {
 
 	/* This class represents a task.
 	*
+	*	_id is the indentifier.
 	*	_tittle is the task itself.
 	*	_accountable is the person who has to do the task.
 	*	_term defines the task deadline.			
 	*	_status is true if the task is done and false otherwise.
 	*/
 
-	constructor(id, title, accountable, term, status) {
+	constructor(title, accountable, term, status) {
+
+		this._id = Task.generateId();
 
 		this._title = title;
 
@@ -18,6 +21,13 @@ class Task {
 
 		this._status = status;
 
+	}
+
+	static generateId() {
+		if(this.tasksId == null) this.tasksId = 0;
+		else this.tasksId++;
+
+		return this.tasksId;
 	}
 
 	get id() {
@@ -40,10 +50,6 @@ class Task {
 		return this._status;
 	}
 
-	set id(id) {
-		this._id = id;
-	}
-
 	set title(title) {
 		this._title = title;
 	}
@@ -60,7 +66,7 @@ class Task {
 		this._status = status;
 	}
 
-	// return true iff the task is done
+	// return true if and only if the task is done
 	done() {
 		return this._status == 1;
 	}
@@ -148,7 +154,9 @@ class TaskList {
 			todo.innerHTML += "<h1 class='col s12 center'>To Do</h1>";
 
 			for(let i = toDoTasks.length - 1; i >= 0; i--) {
-				todo.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.switchTaskStatus('+i+', 1)">check_box_outline_blank</i></div><div class="col s9"><span class="title">'+this.tasks[i].title+'</span><span class="date grey-text">'+this.tasks[i].term+'</span><br><span>Accountable: '+this.tasks[i].accountable+'</span></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.removeTask('+i+')">delete</i></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="editForm('+i+')">edit</i></div></div></div>';
+				let id = toDoTasks[i].id;
+				id = this.tasks.findIndex(task => task.id === id);
+				todo.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.switchTaskStatus('+id+', 1)">check_box_outline_blank</i></div><div class="col s9"><span class="title">'+toDoTasks[i].title+'</span><span class="date grey-text">'+toDoTasks[i].term+'</span><br><span>Accountable: '+toDoTasks[i].accountable+'</span></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.removeTask('+id+')">delete</i></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="editForm('+id+')">edit</i></div></div></div>';
 			}
 
 		}
@@ -158,7 +166,10 @@ class TaskList {
 			done.innerHTML += "<h1 class='col s12 center'>Done</h1>";
 
 			for(let i = doneTasks.length - 1; i >= 0; i--) {
-				done.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.switchTaskStatus('+i+', 0)">check_box</i></div><div class="col s9"><span class="title">'+this.tasks[i].title+'</span><span class="date grey-text">'+this.tasks[i].term+'</span><br><span>Accountable: '+this.tasks[i].accountable+'</span></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.removeTask('+i+')">delete</i></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="editForm('+i+')">edit</i></div></div></div>';
+				let id = doneTasks[i].id;
+				id = this.tasks.findIndex(task => task.id === id);
+				
+				done.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.switchTaskStatus('+id+', 0)">check_box</i></div><div class="col s9"><span class="title">'+doneTasks[i].title+'</span><span class="date grey-text">'+doneTasks[i].term+'</span><br><span>Accountable: '+doneTasks[i].accountable+'</span></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.removeTask('+id+')">delete</i></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="editForm('+id+')">edit</i></div></div></div>';
 			}
 
 		}
