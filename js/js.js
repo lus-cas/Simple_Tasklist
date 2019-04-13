@@ -159,7 +159,7 @@ class Tasklist {
 			for(let i = toDoTasks.length - 1; i >= 0; i--) {
 				let id = toDoTasks[i].id;
 				id = this.tasks.findIndex(task => task.id === id);
-				todo.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.switchTaskStatus('+id+', 1)">check_box_outline_blank</i></div><div class="col s9"><span class="title">'+toDoTasks[i].title+'</span><span class="date grey-text">'+toDoTasks[i].term+'</span><br><span>Accountable: '+toDoTasks[i].accountable+'</span></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.removeTask('+id+')">delete</i></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="editForm('+id+')">edit</i></div></div></div>';
+				todo.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.switchTaskStatus('+id+', 1)">check_box_outline_blank</i></div><div class="col s8 m9"><span class="title">'+toDoTasks[i].title+'</span><span class="date grey-text">'+toDoTasks[i].term+'</span><br><span>Accountable: '+toDoTasks[i].accountable+'</span></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" onclick="tasklist.removeTask('+id+')">delete</i></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" onclick="editForm('+id+')">edit</i></div></div></div>';
 			}
 
 		}
@@ -172,7 +172,7 @@ class Tasklist {
 				let id = doneTasks[i].id;
 				id = this.tasks.findIndex(task => task.id === id);
 
-				done.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.switchTaskStatus('+id+', 0)">check_box</i></div><div class="col s9"><span class="title">'+doneTasks[i].title+'</span><span class="date grey-text">'+doneTasks[i].term+'</span><br><span>Accountable: '+doneTasks[i].accountable+'</span></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.removeTask('+id+')">delete</i></div><div class="col s1 center"><i class="material-icons option-button pointer" onclick="editForm('+id+')">edit</i></div></div></div>';
+				done.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.switchTaskStatus('+id+', 0)">check_box</i></div><div class="col s7 m9"><span class="title">'+doneTasks[i].title+'</span><span class="date grey-text">'+doneTasks[i].term+'</span><br><span>Accountable: '+doneTasks[i].accountable+'</span></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" onclick="tasklist.removeTask('+id+')">delete</i></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" onclick="editForm('+id+')">edit</i></div></div></div>';
 			}
 
 		}

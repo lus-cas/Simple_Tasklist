@@ -13,7 +13,7 @@
 
 /* sets the page font */
 *{
-	font-family: 'Montserrat', sans-serif;
+	font-family: 'Quicksand', sans-serif;
 }
 
 /* genaral settings */
@@ -52,7 +52,8 @@ input:invalid{
 }
 
 .border{
-	border: 1px solid black;
+	border-radius: 10px;
+	box-shadow: 0 24px 38px -13px rgba(0,0,0,0.14), 0 9px 20px -15px rgba(0,0,0,0.12), 0 11px 15px -15px rgba(0,0,0,0.2);
 }
 
 .submit-button{
@@ -75,6 +76,9 @@ input{
 	text-indent: 4px;
 	margin-top: 20px;
 	color: black;
+	border: none;
+	border-bottom: 1px solid;
+	font-family: inherit;
 }
 
 input[type=date]::-webkit-datetime-edit {
@@ -116,6 +120,10 @@ button{
 
 .hidden{
 	display: none;
+}
+
+.bold {
+	font-weight: bold;
 }
 
 #todo-wrapper{
