@@ -159,7 +159,7 @@ class Tasklist {
 			for(let i = toDoTasks.length - 1; i >= 0; i--) {
 				let id = toDoTasks[i].id;
 				id = this.tasks.findIndex(task => task.id === id);
-				todo.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.switchTaskStatus('+id+', 1)">check_box_outline_blank</i></div><div class="col s7 m9"><span class="title">'+toDoTasks[i].title+'</span><span class="date grey-text">'+toDoTasks[i].term+'</span><br><span>Accountable: '+toDoTasks[i].accountable+'</span></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" onclick="tasklist.removeTask('+id+')">delete</i></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" onclick="editForm('+id+')">edit</i></div></div></div>';
+				todo.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.switchTaskStatus('+id+', 1)">check_box_outline_blank</i></div><div class="col s7 m9"><span class="title">'+toDoTasks[i].title+'</span><span class="date grey-text">'+toDoTasks[i].term+'</span><br><span>'+toDoTasks[i].accountable+'</span></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" onclick="tasklist.removeTask('+id+')">delete</i></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" onclick="editForm('+id+')">edit</i></div></div></div>';
 			}
 
 		}
@@ -172,7 +172,7 @@ class Tasklist {
 				let id = doneTasks[i].id;
 				id = this.tasks.findIndex(task => task.id === id);
 
-				done.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.switchTaskStatus('+id+', 0)">check_box</i></div><div class="col s7 m9"><span class="title">'+doneTasks[i].title+'</span><span class="date grey-text">'+doneTasks[i].term+'</span><br><span>Accountable: '+doneTasks[i].accountable+'</span></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" onclick="tasklist.removeTask('+id+')">delete</i></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" onclick="editForm('+id+')">edit</i></div></div></div>';
+				done.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.switchTaskStatus('+id+', 0)">check_box</i></div><div class="col s7 m9"><span class="title">'+doneTasks[i].title+'</span><span class="date grey-text">'+doneTasks[i].term+'</span><br><span>'+doneTasks[i].accountable+'</span></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" onclick="tasklist.removeTask('+id+')">delete</i></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" onclick="editForm('+id+')">edit</i></div></div></div>';
 			}
 
 		}
@@ -227,6 +227,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
 		event.preventDefault();
 
+		if(! checkInput(inputs[0])) return -1;
+
+		inputs[0].style.borderBottom = '1px solid black';
+
 		tasklist.addTask(inputs[0].value, inputs[1].value, inputs[2].value, 0);
 		tasklist.printTasks();
 		tasklist.saveTasks();
@@ -271,6 +275,8 @@ for(let i = 0; i < terms.length; i++) {
 // turns on the modal and edit task form
 function editForm(id) {
 
+	editInputs[0].style.borderBottom = '1px solid black';
+	
 	form.classList.add("hidden");
 	overlayer.style = "opacity: 0.8; z-index: 10;";
 	editTaskForm.classList.remove("hidden");
@@ -285,6 +291,8 @@ function editForm(id) {
 	var submit = function(event) {
 
 		event.preventDefault();
+
+		if(! checkInput(editInputs[0])) return -1;
 
 		tasklist.editTask(id, editInputs[0].value, editInputs[1].value, editInputs[2].value);
 
@@ -301,4 +309,14 @@ function editForm(id) {
 	
 	editTaskForm.addEventListener("submit", submit);	
 
+}
+
+
+function checkInput(input) {
+	if(input.value == "") {
+		input.style.borderBottom = '1px var(--red) solid';
+		return false;
+	}
+
+	return true;
 }
