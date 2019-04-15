@@ -123,11 +123,10 @@ class Tasklist {
 
 	// search for a task by a given string
 	search(query) {
-		const title = this.tasks.filter(task => { return task.title.indexOf(query) != -1 });
-		const accountable = this.tasks.filter(task => { return task.accountable.indexOf(query) != -1 });
-		const term = this.tasks.filter(task => { return task.term.indexOf(query) != -1 });
-
-		this.print(title.concat(accountable.concat(term)));
+		const tasks = this.tasks.filter(task => {
+			return task.title.indexOf(query) != -1 || task.accountable.indexOf(query) != -1 || task.term.indexOf(query) != -1
+		});
+		this.print(tasks);
 	}
 
 	// create a new Task and pushes it to the list
@@ -228,6 +227,11 @@ class Form {
 			});
 
 		}
+
+		// hide form on reset event
+		this.form.addEventListener("submit", event => {
+			event.preventDefault();
+		});
 
 		// hide form on reset event
 		this.form.addEventListener("reset", () => {
@@ -342,9 +346,7 @@ if(tasks != null) {
 window.addEventListener("DOMContentLoaded", () => {
 
 	// prevents add-task-form from submiting and creates a new task
-	add.form.addEventListener("submit", event => {
-
-		event.preventDefault();
+	add.form.addEventListener("submit", () => {
 
 		if(!add.check()) return -1;
 
@@ -360,15 +362,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
 	// prevents search-task-form from submiting and prints the result
-	search.form.addEventListener("submit", event => {
+	search.inputs[0].addEventListener("keypress", () => {
 
-		event.preventDefault();
-
-		if(!search.check()) return -1;
-
-		tasklist.search(edit.inputs[0].value);
-
-		search.inputs[0].value = "";
+		if(search.inputs[0].value == null) tasklist.print();
+		tasklist.search(search.inputs[0].value);
 
 	});
 
