@@ -1,3 +1,16 @@
+// Criar classe css active
+// -	Criar função generalizada que recebe um form
+// 	e diminui o height de todos os form active
+// 	pra depois aumentar o height do parametro em x px
+ 	
+//  	function(formTarget, height)
+
+// -	Implementar search onkeydown
+
+// -	Hide form quando clicar de novo no ícone como
+// 	se fosse um collapse
+
+
 class Task {
 
 	/* This class represents a task.
@@ -266,12 +279,18 @@ window.addEventListener("DOMContentLoaded", () => {
 
 	});
 
-	// the modal must to turn off on-click event
-	overlayer.addEventListener("click", event => {
+	// hide edit-task-form
+	var hideEditForm = () => {
 		editTaskForm.classList.add("hidden");
 		form.classList.remove("hidden");
 		overlayer.style = "opacity: 0; z-index: -3;";
-	});
+	}
+
+	// the modal must to turn off on reset form event
+	editTaskForm.addEventListener("reset", hideEditForm);
+
+	// the modal must to turn off on-click event
+	overlayer.addEventListener("click", hideEditForm);
 
 });
 
