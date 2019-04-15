@@ -12,22 +12,26 @@
 }
 
 /* sets the page font */
-*{
+* {
 	font-family: 'Quicksand', sans-serif;
 }
 
 /* genaral settings */
-h1{
+h1 {
 	font-weight: bold;
 	font-size: 3rem;
 }
 
-input{
+input {
 	height: 30px;
 }
 
 input:invalid{
 	box-shadow: none;
+}
+
+button {
+	font-family: inherit;	
 }
 
 .pointer{
@@ -39,30 +43,25 @@ input:invalid{
 	padding: 10px !important;
 }
 
-.h120{
+.h120 {
 	height: 120px;
 }
 
-.w100{
+.w100 {
 	width: 100%;
 }
 
-.mt-10{
+.mt-10 {
 	margin-top: 10vh;
+}
+
+.align-icon {
+	transform: translateY(5px);
 }
 
 .border{
 	border-radius: 10px;
 	box-shadow: 0 5px 38px -20px rgba(0,0,0,0.14), 0 9px 20px -15px rgba(0,0,0,0.12), 0 11px 15px -15px rgba(0,0,0,0.2);
-}
-
-.submit-button{
-	font-size: 40px !important;
-	margin-top: -10px;
-}
-
-.option-button{
-	margin-top: 10px;
 }
 
 .date{
@@ -94,6 +93,14 @@ button{
 	border: none;
 }
 
+.button{
+	height: 30px;
+}
+
+.option-button{
+	margin-top: 10px;
+}
+
 
 .title{
 	font-size: 18px;
@@ -118,8 +125,14 @@ button{
 	position: relative;
 }
 
-.hidden{
+.hidden {
 	display: none;
+}
+
+.minimized {
+	height: 0;
+	overflow-y: hidden;
+	transition: all 0.15s linear;
 }
 
 .bold {

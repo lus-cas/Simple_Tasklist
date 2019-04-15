@@ -197,10 +197,15 @@ tasks = localStorage.getItem("tasks");
 const todo = document.getElementById("todo-wrapper"); // div that contains the to do list
 const done = document.getElementById("done-wrapper"); // div that contains the done list
 
-const form = document.forms["task_form"]; //new task form reference
+const addButton = document.getElementById("add_button"); // show new task form button
+const form = document.forms["task_form"]; // new task form reference
 const inputs = document.forms["task_form"].getElementsByTagName("input"); // new task inputs
 
-const editTaskForm = document.forms["edit_task_form"]; //edit task form reference
+const searchButton = document.getElementById("search_button"); // show search task form button
+const searchForm = document.forms["search_form"]; // search task form
+const searchInput = document.forms["search_form"].getElementsByTagName("input"); // search input
+
+const editTaskForm = document.forms["edit_task_form"]; // edit task form reference
 const editInputs = document.forms["edit_task_form"].getElementsByTagName("input"); // edit inputs
 
 const overlayer = document.getElementById("overlayer"); // modal efect div
@@ -221,6 +226,26 @@ if(tasks != null) {
 
 // on-load window event
 window.addEventListener("DOMContentLoaded", () => {
+
+	// display new-task-form and hide search-task-form
+	addButton.addEventListener("click", () => {
+		form.style.height = '160px';
+		searchForm.style.height = '0';
+		inputs[0].focus();
+	});
+
+	// new-task-form should be hidden on reset event
+	form.addEventListener("reset", () => {
+		form.style.height = '0';
+	});
+
+	// display search-task-form and hide new-task-form
+	searchButton.addEventListener("click", () => {
+		searchForm.style.height = '80px';
+		form.style.height = '0';
+		searchInput[0].focus();
+	});
+
 
 	// prevents form from submiting and creates a new task
 	form.addEventListener("submit", event => {
@@ -310,7 +335,6 @@ function editForm(id) {
 	editTaskForm.addEventListener("submit", submit);	
 
 }
-
 
 function checkInput(input) {
 	if(input.value == "") {
