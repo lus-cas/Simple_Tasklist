@@ -86,7 +86,7 @@ class Tasklist {
 
 	constructor() {
 
-		this._tasks = [];
+		this._tasks = []; // tasklist
 	
 	}
 
@@ -103,19 +103,31 @@ class Tasklist {
 		return (this.tasks.length == 0);
 	}
 
-	// returns all to do tasks as a list
-	toDo() {
+	// returns all to do tasks from a tasklist or from the this.tasks by default
+	toDo(tasks) {
+		if(tasks != null) return tasks.filter(task => { return !task.done() });
 		return this.tasks.filter(task => { return !task.done() });
 	}
 
-	// returns all done tasks as a list
-	done() {
+	// returns all done tasks from a tasklist or from the this.tasks by default
+	done(tasks) {
+		if(tasks != null) return tasks.filter(task => { return task.done() });
 		return this.tasks.filter(task => { return task.done() });
 	}
 
 	// pushes a Task to the list
 	push(task) {
 		this.tasks.push(task);
+	}
+
+
+	// search for a task by a given string
+	search(query) {
+		const title = this.tasks.filter(task => { return task.title.indexOf(query) != -1 });
+		const accountable = this.tasks.filter(task => { return task.accountable.indexOf(query) != -1 });
+		const term = this.tasks.filter(task => { return task.term.indexOf(query) != -1 });
+
+		this.print(title.concat(accountable.concat(term)));
 	}
 
 	// create a new Task and pushes it to the list
@@ -154,13 +166,13 @@ class Tasklist {
 	}
 
 	// writes the tasklist
-	print() {
+	print(tasks) {
 		todo.innerHTML = "";
 		done.innerHTML = "";
 
 
-		var toDoTasks = this.toDo();
-		var doneTasks = this.done();
+		var toDoTasks = this.toDo(tasks);
+		var doneTasks = this.done(tasks);
 
 		if(toDoTasks.length) {
 
@@ -192,12 +204,18 @@ class Tasklist {
 
 class Form {
 
+	/*	This class represents a Form html element
+	*	and some validations functions.
+	*/
+
 	constructor(name, button) {
-		this._form = document.forms[name];
-		this._inputs = document.forms[name].getElementsByTagName("input");
-		this._button = document.getElementById(button);
+
+		this._form = document.forms[name]; // form html element
+		this._inputs = document.forms[name].getElementsByTagName("input"); // inputs elements
+		this._button = document.getElementById(button); // form button 
 
 		if(this.button) {
+
 			// display form and hide the active ones
 			this.button.addEventListener("click", () => {
 				if(this.active()) 
@@ -208,12 +226,14 @@ class Form {
 					else setTimeout(() => { this.show() }, 150);
 				}	
 			});
+
 		}
 
 		// hide form on reset event
 		this.form.addEventListener("reset", () => {
 			this.hide();
 		});
+
 	}
 
 	get form() {
@@ -240,21 +260,25 @@ class Form {
 		this._button = document.getElementById(button);
 	}
 
+	// verifies if the form is already visible on screen
 	active() {
 		return (this.form.classList.contains("active"));
 	}
 
+	// displays the form
 	show() {
 		this.form.style.height = "160px";
 		this.form.classList.add("active");
 		this.inputs[0].focus();
 	}
 
+	// hide the form
 	hide() {
 		this.form.style.height = "0";
 		this.form.classList.remove("active");
 	}
 
+	// check if the the required input isn't null  
 	check() {
 		if(this.inputs[0].value == "") {
 			this.inputs[0].style.borderBottom = '1px var(--red) solid';
@@ -264,6 +288,7 @@ class Form {
 		return true;
 	}
 
+	// hide all actives form
 	static hideActives() {
 		var active = document.querySelectorAll(".active");
 
@@ -284,9 +309,7 @@ class Form {
 * 	Sorry.
 */
 
-const forms = document.getElementsByTagName("form");
-
-var tasks = localStorage.getItem("tasks");
+var tasks = localStorage.getItem("tasks"); // get the tasks stored on localStorage
 const tasklist = new Tasklist(); // Tasklist object
 
 const todo = document.getElementById("todo-wrapper"); // div that contains the to do list
@@ -310,7 +333,6 @@ if(tasks != null) {
 	}
 
 	tasklist.print();
-	edit.button = "edit_button";
 
 }else {
 	// no tasks goes here
@@ -319,7 +341,7 @@ if(tasks != null) {
 // on-load window event
 window.addEventListener("DOMContentLoaded", () => {
 
-	// prevents form from submiting and creates a new task
+	// prevents add-task-form from submiting and creates a new task
 	add.form.addEventListener("submit", event => {
 
 		event.preventDefault();
@@ -334,7 +356,19 @@ window.addEventListener("DOMContentLoaded", () => {
 			add.inputs[i].value = "";
 		}
 
-		edit.button = "edit_button";
+	});
+
+
+	// prevents search-task-form from submiting and prints the result
+	search.form.addEventListener("submit", event => {
+
+		event.preventDefault();
+
+		if(!search.check()) return -1;
+
+		tasklist.search(edit.inputs[0].value);
+
+		search.inputs[0].value = "";
 
 	});
 
