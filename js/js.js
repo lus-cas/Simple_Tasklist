@@ -1,12 +1,3 @@
-// Criar classe css active
-// -	Criar função generalizada que recebe um form
-// 	e diminui o height de todos os form active
-// 	pra depois aumentar o height do parametro em x px
- 	
-//  	function(formTarget, height)
-
-// -	Implementar search onkeydown
-
 // -	Hide form quando clicar de novo no ícone como
 // 	se fosse um collapse
 
@@ -15,11 +6,11 @@ class Task {
 
 	/* This class represents a task.
 	*
-	*	_id is the indentifier.
-	*	_tittle is the task itself.
-	*	_accountable is the person who has to do the task.
-	*	_term defines the task deadline.			
-	*	_status is true if the task is done and false otherwise.
+	*	id is the indentifier.
+	*	tittle is the task itself.
+	*	accountable is the person who has to do the task.
+	*	term defines the task deadline.			
+	*	status is true if the task is done and false otherwise.
 	*/
 
 	constructor(title, accountable, term, status) {
@@ -123,41 +114,47 @@ class Tasklist {
 	}
 
 	// pushes a Task to the list
-	pushTask(task) {
+	push(task) {
 		this.tasks.push(task);
 	}
 
 	// create a new Task and pushes it to the list
-	addTask(title, accountable, term, status) {
+	add(title, accountable, term, status) {
 		const task = new Task(title, accountable, term, status);
-		this.pushTask(task);
+		this.push(task);
 	}
 
 	// removes a Task of the list
-	removeTask(id) {
+	remove(id) {
 		this.tasks.splice(id, 1);
-		this.printTasks();
-		this.saveTasks();
+		this.print();
+		this.save();
 	}
 
 	// edit task operation
-	editTask(id, title, accountable, term) {
+	edit(id, title, accountable, term) {
 		this.tasks[id].title = title;
 		this.tasks[id].accountable = accountable;
 		this.tasks[id].term = term;
-		this.printTasks();
-		this.saveTasks();
+		this.print();
+		this.save();
+	}
+
+	// saves the tasklist into the localStorage
+	save() {
+		let tasks = JSON.stringify(this.tasks);
+		localStorage.setItem("tasks", tasks);
 	}
 
 	// changes the task status (1: done 0: to do)
-	switchTaskStatus(id, status) {
+	switchStatus(id, status) {
 		this.tasks[id].status = status;
-		this.printTasks();
-		this.saveTasks();
+		this.print();
+		this.save();
 	}
 
 	// writes the tasklist
-	printTasks() {
+	print() {
 		todo.innerHTML = "";
 		done.innerHTML = "";
 
@@ -165,19 +162,19 @@ class Tasklist {
 		var toDoTasks = this.toDo();
 		var doneTasks = this.done();
 
-		if(toDoTasks.length > 0) {
+		if(toDoTasks.length) {
 
 			todo.innerHTML += "<h1 class='col s12 center'>To Do</h1>";
 
 			for(let i = toDoTasks.length - 1; i >= 0; i--) {
 				let id = toDoTasks[i].id;
 				id = this.tasks.findIndex(task => task.id === id);
-				todo.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.switchTaskStatus('+id+', 1)">check_box_outline_blank</i></div><div class="col s7 m9"><span class="title">'+toDoTasks[i].title+'</span><span class="date grey-text">'+toDoTasks[i].term+'</span><br><span>'+toDoTasks[i].accountable+'</span></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" onclick="tasklist.removeTask('+id+')">delete</i></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" onclick="editForm('+id+')">edit</i></div></div></div>';
+				todo.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.switchStatus('+id+', 1)">check_box_outline_blank</i></div><div class="col s7 m9"><span class="title">'+toDoTasks[i].title+'</span><span class="date grey-text">'+toDoTasks[i].term+'</span><br><span>'+toDoTasks[i].accountable+'</span></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" onclick="tasklist.remove('+id+')">delete</i></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" target-task="'+id+'" name="edit_button">edit</i></div></div></div>';
 			}
 
 		}
 
-		if(doneTasks.length > 0) {
+		if(doneTasks.length) {
 
 			done.innerHTML += "<h1 class='col s12 center'>Done</h1>";
 
@@ -185,18 +182,101 @@ class Tasklist {
 				let id = doneTasks[i].id;
 				id = this.tasks.findIndex(task => task.id === id);
 
-				done.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.switchTaskStatus('+id+', 0)">check_box</i></div><div class="col s7 m9"><span class="title">'+doneTasks[i].title+'</span><span class="date grey-text">'+doneTasks[i].term+'</span><br><span>'+doneTasks[i].accountable+'</span></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" onclick="tasklist.removeTask('+id+')">delete</i></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" onclick="editForm('+id+')">edit</i></div></div></div>';
+				done.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.switchStatus('+id+', 0)">check_box</i></div><div class="col s7 m9"><span class="title">'+doneTasks[i].title+'</span><span class="date grey-text">'+doneTasks[i].term+'</span><br><span>'+doneTasks[i].accountable+'</span></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" onclick="tasklist.remove('+id+')">delete</i></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" target-task="'+id+'" name="edit_button">edit</i></div></div></div>';
 			}
 
 		}
 		
 	}
+}
 
-	// saves the tasklist into the localStorage
-	saveTasks() {
-		let tasks = JSON.stringify(this.tasks);
-		localStorage.setItem("tasks", tasks);
+class Form {
+
+	constructor(name, button) {
+		this._form = document.forms[name];
+		this._inputs = document.forms[name].getElementsByTagName("input");
+		this._button = document.getElementById(button);
+
+		if(this.button) {
+			// display form and hide the active ones
+			this.button.addEventListener("click", () => {
+				if(this.active()) 
+					this.hide();
+
+				else{
+					if(!Form.hideActives()) this.show();
+					else setTimeout(() => { this.show() }, 150);
+				}	
+			});
+		}
+
+		// hide form on reset event
+		this.form.addEventListener("reset", () => {
+			this.hide();
+		});
 	}
+
+	get form() {
+		return this._form;
+	}
+
+	get inputs() {
+		return this._inputs;
+	}
+
+	get button() {
+		return this._button;
+	}
+
+	set form(name){
+		this._form = document.forms[name];
+	}	
+
+	set inputs(name){
+		this._inputs = document.forms[name].getElementsByTagName("input");
+	}
+
+	set button(button){
+		this._button = document.getElementById(button);
+	}
+
+	active() {
+		return (this.form.classList.contains("active"));
+	}
+
+	show() {
+		this.form.style.height = "160px";
+		this.form.classList.add("active");
+		this.inputs[0].focus();
+	}
+
+	hide() {
+		this.form.style.height = "0";
+		this.form.classList.remove("active");
+	}
+
+	check() {
+		if(this.inputs[0].value == "") {
+			this.inputs[0].style.borderBottom = '1px var(--red) solid';
+			return false;
+		}
+
+		return true;
+	}
+
+	static hideActives() {
+		var active = document.querySelectorAll(".active");
+
+		if(active.length == 0) return false;
+
+		active.forEach(item => {
+			item.classList.remove("active");
+			item.style.height = "0";
+		});
+
+		return true;
+	}
+
 }
 
 /*	I should've created a new class for storage.
@@ -204,22 +284,17 @@ class Tasklist {
 * 	Sorry.
 */
 
+const forms = document.getElementsByTagName("form");
+
+var tasks = localStorage.getItem("tasks");
 const tasklist = new Tasklist(); // Tasklist object
-tasks = localStorage.getItem("tasks");
 
 const todo = document.getElementById("todo-wrapper"); // div that contains the to do list
 const done = document.getElementById("done-wrapper"); // div that contains the done list
 
-const addButton = document.getElementById("add_button"); // show new task form button
-const form = document.forms["task_form"]; // new task form reference
-const inputs = document.forms["task_form"].getElementsByTagName("input"); // new task inputs
-
-const searchButton = document.getElementById("search_button"); // show search task form button
-const searchForm = document.forms["search_form"]; // search task form
-const searchInput = document.forms["search_form"].getElementsByTagName("input"); // search input
-
-const editTaskForm = document.forms["edit_task_form"]; // edit task form reference
-const editInputs = document.forms["edit_task_form"].getElementsByTagName("input"); // edit inputs
+const add = new Form("add_form", "add_button"); // add-task form reference
+const search = new Form("search_form", "search_button"); // search-task form reference
+const edit = new Form("edit_form", "edit_button"); // edit-task form reference
 
 const overlayer = document.getElementById("overlayer"); // modal efect div
 
@@ -231,66 +306,50 @@ if(tasks != null) {
 
 	for(i in tasks) {
 		var task = new Task(tasks[i]._title, tasks[i]._accountable, tasks[i]._term, tasks[i]._status);
-		tasklist.pushTask(task);
+		tasklist.push(task);
 	}
 
-	tasklist.printTasks();
+	tasklist.print();
+	edit.button = "edit_button";
+
+}else {
+	// no tasks goes here
 }
 
 // on-load window event
 window.addEventListener("DOMContentLoaded", () => {
 
-	// display new-task-form and hide search-task-form
-	addButton.addEventListener("click", () => {
-		form.style.height = '160px';
-		searchForm.style.height = '0';
-		inputs[0].focus();
-	});
-
-	// new-task-form should be hidden on reset event
-	form.addEventListener("reset", () => {
-		form.style.height = '0';
-	});
-
-	// display search-task-form and hide new-task-form
-	searchButton.addEventListener("click", () => {
-		searchForm.style.height = '80px';
-		form.style.height = '0';
-		searchInput[0].focus();
-	});
-
-
 	// prevents form from submiting and creates a new task
-	form.addEventListener("submit", event => {
+	add.form.addEventListener("submit", event => {
 
 		event.preventDefault();
 
-		if(! checkInput(inputs[0])) return -1;
+		if(!add.check()) return -1;
 
-		inputs[0].style.borderBottom = '1px solid black';
+		tasklist.add(add.inputs[0].value, add.inputs[1].value, add.inputs[2].value, 0);
+		tasklist.print();
+		tasklist.save();
 
-		tasklist.addTask(inputs[0].value, inputs[1].value, inputs[2].value, 0);
-		tasklist.printTasks();
-		tasklist.saveTasks();
-
-		for (let i = inputs.length - 1; i >= 0; i--) {
-			inputs[i].value = "";
+		for (let i = add.inputs.length - 1; i >= 0; i--) {
+			add.inputs[i].value = "";
 		}
+
+		edit.button = "edit_button";
 
 	});
 
 	// hide edit-task-form
-	var hideEditForm = () => {
-		editTaskForm.classList.add("hidden");
-		form.classList.remove("hidden");
-		overlayer.style = "opacity: 0; z-index: -3;";
-	}
+	// var hideEditForm = () => {
+	// 	editTaskForm.classList.add("hidden");
+	// 	form.classList.remove("hidden");
+	// 	overlayer.style = "opacity: 0; z-index: -3;";
+	// }
 
 	// the modal must to turn off on reset form event
-	editTaskForm.addEventListener("reset", hideEditForm);
+	// editTaskForm.addEventListener("reset", hideEditForm);
 
 	// the modal must to turn off on-click event
-	overlayer.addEventListener("click", hideEditForm);
+	// overlayer.addEventListener("click", hideEditForm);
 
 });
 
@@ -338,7 +397,7 @@ function editForm(id) {
 
 		if(! checkInput(editInputs[0])) return -1;
 
-		tasklist.editTask(id, editInputs[0].value, editInputs[1].value, editInputs[2].value);
+		tasklist.edit(id, editInputs[0].value, editInputs[1].value, editInputs[2].value);
 
 		for (var i = editInputs.length - 1; i >= 3; i--) {
 			editInputs[i].value = "";
@@ -353,6 +412,22 @@ function editForm(id) {
 	
 	editTaskForm.addEventListener("submit", submit);	
 
+}
+
+function showForm(target, height) {
+	var active = document.querySelectorAll(".active");
+
+	hideForms(active);
+
+	target.style.height = height+"px";
+}
+
+function hideForms(forms) {
+	forms.forEach( (item, index) => {
+			item.classList.remove("active");
+			item.style.height = "0";
+		}
+	);
 }
 
 function checkInput(input) {
