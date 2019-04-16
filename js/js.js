@@ -225,6 +225,7 @@ class Form {
 		// hide form on reset event
 		this.form.addEventListener("submit", event => {
 			event.preventDefault();
+			this.inputs[0].style.borderBottom = '1px solid black';
 		});
 
 		// hide form on reset event
@@ -288,6 +289,7 @@ class Form {
 
 	// switches beteween forms
 	focus() {
+		this.inputs[0].style.borderBottom = '1px solid black';
 		if(this.active()) 
 			this.hide();
 
@@ -394,7 +396,6 @@ for(let i = 0; i < terms.length; i++) {
 // displays the edit-task-form 
 function editForm(id) {
 
-	edit.inputs[0].style.borderBottom = '1px solid black';
 	edit.focus();
 
 	document.body.scrollTop = 0;
