@@ -36,6 +36,11 @@ p {
 	cursor: pointer;
 }
 
+.h70 {
+	min-height: 70px;
+	padding: 10px !important;
+}
+
 .mt-10 {
 	margin-top: 10%;
 }
