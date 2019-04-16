@@ -173,31 +173,30 @@ class Tasklist {
 		todo.innerHTML = "";
 		done.innerHTML = "";
 
-
 		var toDoTasks = this.toDo(tasks);
 		var doneTasks = this.done(tasks);
 
 		if(toDoTasks.length) {
 
-			todo.innerHTML += "<h1 class='col s12 center'>To Do</h1>";
+			todo.innerHTML += "<h2 class='col s12 center'>To Do</h2>";
 
 			for(let i = toDoTasks.length - 1; i >= 0; i--) {
 				let id = toDoTasks[i].id;
 				id = this.tasks.findIndex(task => task.id === id);
-				todo.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.switchStatus('+id+', 1)">check_box_outline_blank</i></div><div class="col s7 m9"><span class="title">'+toDoTasks[i].title+'</span><span class="date grey-text">'+toDoTasks[i].term+'</span><br><span>'+toDoTasks[i].accountable+'</span></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" onclick="tasklist.remove('+id+')">delete</i></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" target-task="'+id+'" name="edit_button">edit</i></div></div></div>';
+				todo.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.switchStatus('+id+', 1)">check_box_outline_blank</i></div><div class="col s7 m9 valign-wrapper"><div><span class="title">'+toDoTasks[i].title+'</span><span class="date grey-text">'+toDoTasks[i].term+'</span><p>'+toDoTasks[i].accountable+'</p></div></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" onclick="tasklist.remove('+id+')">delete</i></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" onclick="editForm('+id+')">edit</i></div></div></div>';
 			}
 
 		}
 
 		if(doneTasks.length) {
 
-			done.innerHTML += "<h1 class='col s12 center'>Done</h1>";
+			done.innerHTML += "<h2 class='col s12 center'>Done</h2>";
 
 			for(let i = doneTasks.length - 1; i >= 0; i--) {
 				let id = doneTasks[i].id;
 				id = this.tasks.findIndex(task => task.id === id);
 
-				done.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.switchStatus('+id+', 0)">check_box</i></div><div class="col s7 m9"><span class="title">'+doneTasks[i].title+'</span><span class="date grey-text">'+doneTasks[i].term+'</span><br><span>'+doneTasks[i].accountable+'</span></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" onclick="tasklist.remove('+id+')">delete</i></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" target-task="'+id+'" name="edit_button">edit</i></div></div></div>';
+				done.innerHTML += '<div class="col s12 m10 l6 offset-m1 offset-l3"><div class="row col s12 border h60"><div class="col s1 center"><i class="material-icons option-button pointer" onclick="tasklist.switchStatus('+id+', 0)">check_box</i></div><div class="col s7 m9 valign-wrapper"><div><span class="title">'+doneTasks[i].title+'</span><span class="date grey-text">'+doneTasks[i].term+'</span><p>'+doneTasks[i].accountable+'</p></div></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" onclick="tasklist.remove('+id+')">delete</i></div><div class="col s2 m1 center"><i class="material-icons option-button pointer" onclick="editForm('+id+')">edit</i></div></div></div>';
 			}
 
 		}
@@ -221,13 +220,7 @@ class Form {
 
 			// display form and hide the active ones
 			this.button.addEventListener("click", () => {
-				if(this.active()) 
-					this.hide();
-
-				else{
-					if(!Form.hideActives()) this.show();
-					else setTimeout(() => { this.show() }, 150);
-				}	
+				this.focus();
 			});
 
 		}
@@ -296,6 +289,17 @@ class Form {
 		return true;
 	}
 
+	// switches beteween forms
+	focus() {
+		if(this.active()) 
+			this.hide();
+
+		else{
+			if(!Form.hideActives()) this.show();
+			else setTimeout(() => { this.show() }, 100);
+		}
+	}
+
 	// hide all actives form
 	static hideActives() {
 		var active = document.querySelectorAll(".active");
@@ -327,9 +331,6 @@ const add = new Form("add_form", "add_button"); // add-task form reference
 const search = new Form("search_form", "search_button"); // search-task form reference
 const edit = new Form("edit_form", "edit_button"); // edit-task form reference
 
-const overlayer = document.getElementById("overlayer"); // modal efect div
-
-
 // verifies if there's any tasks into the localStorage and pushes 'em to the tasklist object. prints the list also
 if(tasks != null) {
 
@@ -340,11 +341,9 @@ if(tasks != null) {
 		tasklist.push(task);
 	}
 
-	tasklist.print();
-
-}else {
-	// no tasks goes here
 }
+
+tasklist.print();
 
 // on-load window event
 window.addEventListener("DOMContentLoaded", () => {
@@ -354,7 +353,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 		if(!add.check()) return -1;
 
-		tasklist.add(add.inputs[0].value, add.inputs[1].value, add.inputs[2].value, 0);
+		tasklist.add(add.inputs[0].value, add.inputs[1].value, add.inputs[2].value);
 		tasklist.print();
 		tasklist.save();
 
@@ -364,26 +363,12 @@ window.addEventListener("DOMContentLoaded", () => {
 
 	});
 
-
 	// prevents search-task-form from submiting and prints the result
 	search.inputs[0].addEventListener("keyup", () => {
 
 		tasklist.search(search.inputs[0].value);
 
 	});
-
-	// hide edit-task-form
-	// var hideEditForm = () => {
-	// 	editTaskForm.classList.add("hidden");
-	// 	form.classList.remove("hidden");
-	// 	overlayer.style = "opacity: 0; z-index: -3;";
-	// }
-
-	// the modal must to turn off on reset form event
-	// editTaskForm.addEventListener("reset", hideEditForm);
-
-	// the modal must to turn off on-click event
-	// overlayer.addEventListener("click", hideEditForm);
 
 });
 
@@ -409,66 +394,34 @@ for(let i = 0; i < terms.length; i++) {
 	});
 }
 
-// turns on the modal and edit task form
+// displays the edit-task-form 
 function editForm(id) {
 
-	editInputs[0].style.borderBottom = '1px solid black';
-	
-	form.classList.add("hidden");
-	overlayer.style = "opacity: 0.8; z-index: 10;";
-	editTaskForm.classList.remove("hidden");
+	edit.inputs[0].style.borderBottom = '1px solid black';
+	edit.focus();
 
 	document.body.scrollTop = 0;
   	document.documentElement.scrollTop = 0; 
 
-	editInputs[0].value = tasklist.tasks[id].title;
-	editInputs[1].value = tasklist.tasks[id].accountable;
-	editInputs[2].value = tasklist.tasks[id].term;
+	edit.inputs[0].value = tasklist.tasks[id].title;
+	edit.inputs[1].value = tasklist.tasks[id].accountable;
+	edit.inputs[2].value = tasklist.tasks[id].term;
 
 	var submit = function(event) {
 
-		event.preventDefault();
+		if(!edit.check()) return -1;
 
-		if(! checkInput(editInputs[0])) return -1;
+		tasklist.edit(id, edit.inputs[0].value, edit.inputs[1].value, edit.inputs[2].value, 0);
 
-		tasklist.edit(id, editInputs[0].value, editInputs[1].value, editInputs[2].value);
-
-		for (var i = editInputs.length - 1; i >= 3; i--) {
-			editInputs[i].value = "";
+		for (let i = edit.inputs.length - 1; i >= 0; i--) {
+			edit.inputs[i].value = "";
 		}
 
-		editTaskForm.classList.add("hidden");
-		form.classList.remove("hidden");
-		overlayer.style = "opacity: 0; z-index: -3;";
+		edit.hide();
 
-		editTaskForm.removeEventListener("submit", submit);
+		edit.form.removeEventListener("submit", submit);
 	}
 	
-	editTaskForm.addEventListener("submit", submit);	
+	edit.form.addEventListener("submit", submit);
 
-}
-
-function showForm(target, height) {
-	var active = document.querySelectorAll(".active");
-
-	hideForms(active);
-
-	target.style.height = height+"px";
-}
-
-function hideForms(forms) {
-	forms.forEach( (item, index) => {
-			item.classList.remove("active");
-			item.style.height = "0";
-		}
-	);
-}
-
-function checkInput(input) {
-	if(input.value == "") {
-		input.style.borderBottom = '1px var(--red) solid';
-		return false;
-	}
-
-	return true;
 }
