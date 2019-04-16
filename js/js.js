@@ -126,8 +126,9 @@ class Tasklist {
 		if(query == "") this.print();
 
 		else {
+			query = query.toLowerCase();
 			const tasks = this.tasks.filter(task => {
-				return task.title.indexOf(query) != -1 || task.accountable.indexOf(query) != -1 || task.term.indexOf(query) != -1
+				return task.title.toLowerCase().indexOf(query) != -1 || task.accountable.toLowerCase().indexOf(query) != -1 || task.term.toLowerCase().indexOf(query) != -1
 			});
 			this.print(tasks);
 		}	
