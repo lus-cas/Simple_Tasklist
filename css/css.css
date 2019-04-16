@@ -32,33 +32,8 @@ p {
 	height: auto;
 }
 
-input {
-	height: 30px;
-}
-
-input:invalid{
-	box-shadow: none;
-}
-
-button {
-	font-family: inherit;	
-}
-
 .pointer{
 	cursor: pointer;
-}
-
-.h60{
-	min-height: 70px;
-	padding: 10px !important;
-}
-
-.h160 {
-	height: 160px;
-}
-
-.w100 {
-	width: 100%;
 }
 
 .mt-10 {
@@ -80,8 +55,14 @@ button {
 	margin-left: 10px;
 }
 
+button {
+	font-family: inherit;
+	background-color: transparent !important;
+	border: none;
+}
 
 input{
+	height: 30px;
 	text-indent: 4px;
 	margin-top: 20px;
 	color: black;
@@ -90,17 +71,8 @@ input{
 	font-family: inherit;
 }
 
-input[type=date]::-webkit-datetime-edit {
-    color: #999;
-}
-
 input:focus{
 	outline: var(--gray);
-}
-
-button{
-	background-color: transparent !important;
-	border: none;
 }
 
 .button{
@@ -117,28 +89,6 @@ button{
 	font-weight: bold;
 }
 
-.overlayer{
-	z-index: -5;
-	opacity: 0;
-	position: fixed;
-	height: 100vh;
-	width: 100%;
-	background-color: var(--black);
-	top: 0;
-	left: 0;
-
-	transition: all 0.35s linear;
-}
-
-.focus{
-	z-index: 11 !important;
-	position: relative;
-}
-
-.hidden {
-	display: none;
-}
-
 .minimized {
 	height: 0;
 	overflow-y: hidden;
@@ -151,11 +101,6 @@ button{
 
 .valign-wrapper {
 	min-height: 100%;
-}
-
-.msg {
-	font-size: 18px;
-	margin-top: 10vh;
 }
 
 #todo-wrapper{

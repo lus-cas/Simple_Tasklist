@@ -1,7 +1,3 @@
-// -	Hide form quando clicar de novo no ícone como
-// 	se fosse um collapse
-
-
 class Task {
 
 	/* This class represents a task.
