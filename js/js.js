@@ -123,10 +123,14 @@ class Tasklist {
 
 	// search for a task by a given string
 	search(query) {
-		const tasks = this.tasks.filter(task => {
-			return task.title.indexOf(query) != -1 || task.accountable.indexOf(query) != -1 || task.term.indexOf(query) != -1
-		});
-		this.print(tasks);
+		if(query == "") this.print();
+
+		else {
+			const tasks = this.tasks.filter(task => {
+				return task.title.indexOf(query) != -1 || task.accountable.indexOf(query) != -1 || task.term.indexOf(query) != -1
+			});
+			this.print(tasks);
+		}	
 	}
 
 	// create a new Task and pushes it to the list
@@ -362,9 +366,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
 	// prevents search-task-form from submiting and prints the result
-	search.inputs[0].addEventListener("keypress", () => {
+	search.inputs[0].addEventListener("keyup", () => {
 
-		if(search.inputs[0].value == null) tasklist.print();
 		tasklist.search(search.inputs[0].value);
 
 	});
