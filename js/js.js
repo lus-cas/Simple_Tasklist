@@ -362,11 +362,20 @@ window.addEventListener("DOMContentLoaded", () => {
 
 	});
 
-	// prevents search-task-form from submiting and prints the result
-	search.inputs[0].addEventListener("keyup", () => {
-
+	// searches for a task by the input value
+	var _search = () => {
 		tasklist.search(search.inputs[0].value);
+	}
 
+	// searches a task on-key-up event
+	search.inputs[0].addEventListener("keyup", _search);
+
+	// searches a task on-change event
+	search.inputs[0].addEventListener("change", _search);
+
+	// prints all tasks on-reset event
+	search.form.addEventListener("reset", () => {
+		tasklist.print();
 	});
 
 });
