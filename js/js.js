@@ -368,10 +368,10 @@ window.addEventListener("DOMContentLoaded", () => {
 	}
 
 	// searches a task on-key-up event
-	search.inputs[0].addEventListener("keyup", _search);
+	search.inputs[0].addEventListener("input", _search);
 
-	// searches a task on-change event
-	search.inputs[0].addEventListener("change", _search);
+	// searches a task on-input event
+	search.inputs[0].addEventListener("input", _search);
 
 	// prints all tasks on-reset event
 	search.form.addEventListener("reset", () => {
@@ -388,13 +388,16 @@ var previousDateLength = 0;
 const terms = document.getElementsByName("term");
 
 for(let i = 0; i < terms.length; i++) {
-	terms[i].addEventListener("keydown", () => {
+	terms[i].addEventListener("input", () => {
 		if(terms[i].value.length > previousDateLength) {
-			if(terms[i].value.length == 2) 
-				terms[i].value += "/";
+			if(terms[i].value.length >= 2) {
+				if(terms[i].value[2] != "/")
+				terms[i].value = terms[i].value.slice(0, 2) + "/" + terms[i].value.slice(2);
 
-			else if(terms[i].value.length == 5)
-				terms[i].value += "/";
+				if(terms[i].value.length >= 5)
+					if(terms[i].value[5] != "/")
+					terms[i].value = terms[i].value.slice(0, 5) + "/" + terms[i].value.slice(5);
+			}	
 		}
 
 		previousDateLength = terms[i].value.length;
