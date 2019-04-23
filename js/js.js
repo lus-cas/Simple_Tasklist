@@ -71,6 +71,11 @@ class Task {
 		return this._status == 1;
 	}
 
+	// returns true if the task contains the given querystring
+	contains(query) {
+		return this.title.toLowerCase().indexOf(query) != -1 || this.accountable.toLowerCase().indexOf(query) != -1 || this.term.toLowerCase().indexOf(query) != -1;
+	}
+
 }
 
 class Tasklist {
@@ -94,7 +99,7 @@ class Tasklist {
 		this._tasks = tasks;
 	}
 
-	// returns true if the list is empty or false elseways
+	// returns true if the list is empty or false otherwise
 	empty() {
 		return (this.tasks.length == 0);
 	}
@@ -124,7 +129,7 @@ class Tasklist {
 		else {
 			query = query.toLowerCase();
 			const tasks = this.tasks.filter(task => {
-				return task.title.toLowerCase().indexOf(query) != -1 || task.accountable.toLowerCase().indexOf(query) != -1 || task.term.toLowerCase().indexOf(query) != -1
+				return task.contains(query)
 			});
 			this.print(tasks);
 		}	
