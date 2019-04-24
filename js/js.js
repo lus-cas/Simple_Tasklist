@@ -388,7 +388,6 @@ window.addEventListener("DOMContentLoaded", () => {
 /*	messy code alert!
 *	the following statemants formats the data input into DD/MM/YYYY
 */
-
 var previousDateLength = 0;
 const terms = document.getElementsByName("term");
 
@@ -396,12 +395,12 @@ for(let i = 0; i < terms.length; i++) {
 	terms[i].addEventListener("input", () => {
 		if(terms[i].value.length > previousDateLength) {
 			if(terms[i].value.length >= 2) {
-				if(terms[i].value[2] != "/")
-				terms[i].value = terms[i].value.slice(0, 2) + "/" + terms[i].value.slice(2);
+				if(terms[i].value[2] != "/" && (terms[i].value[0] != "/" && terms[i].value[1] != "/"))
+					terms[i].value = terms[i].value.slice(0, 2) + "/" + terms[i].value.slice(2);
 
 				if(terms[i].value.length >= 5)
-					if(terms[i].value[5] != "/")
-					terms[i].value = terms[i].value.slice(0, 5) + "/" + terms[i].value.slice(5);
+					if(terms[i].value[5] != "/" && (terms[i].value[2] == "/" && (terms[i].value[3] != "/" && terms[i].value[4] != "/")))
+						terms[i].value = terms[i].value.slice(0, 5) + "/" + terms[i].value.slice(5);
 			}	
 		}
 
@@ -409,6 +408,7 @@ for(let i = 0; i < terms.length; i++) {
 
 	});
 }
+
 
 // displays the edit-task-form 
 function editForm(id) {
