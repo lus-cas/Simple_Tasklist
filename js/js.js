@@ -12,13 +12,9 @@ class Task {
 	constructor(title, accountable, term, status) {
 
 		this._id = Task.generateId();
-
 		this._title = title;
-
 		this._accountable = accountable;
-
 		this._term = term;
-
 		this._status = status;
 
 	}
@@ -227,7 +223,7 @@ class Form {
 
 		}
 
-		// hide form on reset event
+		// hide form on submit event
 		this.form.addEventListener("submit", event => {
 			event.preventDefault();
 			this.inputs[0].style.borderBottom = '1px solid black';
@@ -372,10 +368,7 @@ window.addEventListener("DOMContentLoaded", () => {
 		tasklist.search(search.inputs[0].value);
 	}
 
-	// searches a task on-key-up event
-	search.inputs[0].addEventListener("input", _search);
-
-	// searches a task on-input event
+	// searches a task input event
 	search.inputs[0].addEventListener("input", _search);
 
 	// prints all tasks on-reset event
